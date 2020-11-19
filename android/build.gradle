@@ -13,8 +13,8 @@ apply plugin: 'com.android.library'
 
 def DEFAULT_COMPILE_SDK_VERSION = 26
 def DEFAULT_BUILD_TOOLS_VERSION = "27.0.3"
-def DEFAULT_TARGET_SDK_VERSION  = 22
-def DEFAULT_MIN_SDK_VERSION     = 17
+def DEFAULT_TARGET_SDK_VERSION  = 29
+def DEFAULT_MIN_SDK_VERSION     = 23
 
 android {
   compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-    implementation ('org.jitsi.react:jitsi-meet-sdk:+') {
+    implementation ('org.jitsi.react:jitsi-meet-sdk:2.10.0') {
       transitive = true
     }
 }
