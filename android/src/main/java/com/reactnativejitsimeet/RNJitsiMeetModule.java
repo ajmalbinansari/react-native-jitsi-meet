@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableArray;
 
 @ReactModule(name = RNJitsiMeetModule.MODULE_NAME)
 public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
@@ -32,7 +33,7 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void call(String url, ReadableMap userInfo) {
+    public void call(String url, ReadableMap userInfo, ReadableArray disableFeatures) {
         UiThreadUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -41,44 +42,41 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
                     if (userInfo != null) {
                         if (userInfo.hasKey("displayName")) {
                             _userInfo.setDisplayName(userInfo.getString("displayName"));
-                          }
-                          if (userInfo.hasKey("email")) {
+                        }
+                        if (userInfo.hasKey("email")) {
                             _userInfo.setEmail(userInfo.getString("email"));
-                          }
-                          if (userInfo.hasKey("avatar")) {
+                        }
+                        if (userInfo.hasKey("avatar")) {
                             String avatarURL = userInfo.getString("avatar");
                             try {
                                 _userInfo.setAvatar(new URL(avatarURL));
                             } catch (MalformedURLException e) {
                             }
-                          }
+                        }
                     }
-                    RNJitsiMeetConferenceOptions options = new RNJitsiMeetConferenceOptions.Builder()
+                    // Set initial options of call
+                    RNJitsiMeetConferenceOptions.Builder options = new RNJitsiMeetConferenceOptions.Builder()
                             .setRoom(url)
-                            .setAudioOnly(false)
+                            .setAudioOnly(true)
                             .setWelcomePageEnabled(false)
-                            .setFeatureFlag("invite.enabled", false)
-                            .setFeatureFlag("close-captions.enabled", false)
-                            .setFeatureFlag("raise-hand.enabled", false)
-                            .setFeatureFlag("meeting-password.enabled", false)
-                            .setFeatureFlag("recording.enabled", false)
-                            .setFeatureFlag("toolbox.alwaysVisible", false)
-                            .setFeatureFlag("ios.recording.enabled", false)
-                            .setFeatureFlag("live-streaming.enabled", false)
-                            .setFeatureFlag("meeting-name.enabled", false)
-                            .setFeatureFlag("tile-view.enabled", false)
-                            .setFeatureFlag("welcomepage.enabled", false)
-                            .setFeatureFlag("video-share.enabled", false)
-                            .setUserInfo(_userInfo)
-                            .build();
-                    mJitsiMeetViewReference.getJitsiMeetView().join(options);
+                            .setUserInfo(_userInfo);
+
+                    // Iterate over array of flags passed from RN
+                    for (int i = 0; i < disableFeatures.size(); i++) {
+                        options.setFeatureFlag(disableFeatures.getString(i), false);
+                    }
+
+                    // Build options for call
+                    RNJitsiMeetConferenceOptions finalOptions = options.build();
+
+                    mJitsiMeetViewReference.getJitsiMeetView().join(finalOptions);
                 }
             }
         });
     }
 
     @ReactMethod
-    public void audioCall(String url, ReadableMap userInfo) {
+    public void audioCall(String url, ReadableMap userInfo, ReadableArray disableFeatures) {
         UiThreadUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -87,35 +85,34 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
                     if (userInfo != null) {
                         if (userInfo.hasKey("displayName")) {
                             _userInfo.setDisplayName(userInfo.getString("displayName"));
-                          }
-                          if (userInfo.hasKey("email")) {
+                        }
+                        if (userInfo.hasKey("email")) {
                             _userInfo.setEmail(userInfo.getString("email"));
-                          }
-                          if (userInfo.hasKey("avatar")) {
+                        }
+                        if (userInfo.hasKey("avatar")) {
                             String avatarURL = userInfo.getString("avatar");
                             try {
                                 _userInfo.setAvatar(new URL(avatarURL));
                             } catch (MalformedURLException e) {
                             }
-                          }
+                        }
                     }
-                    RNJitsiMeetConferenceOptions options = new RNJitsiMeetConferenceOptions.Builder()
+                    // Set initial options of call
+                    RNJitsiMeetConferenceOptions.Builder options = new RNJitsiMeetConferenceOptions.Builder()
                             .setRoom(url)
                             .setAudioOnly(true)
                             .setWelcomePageEnabled(false)
-                            .setFeatureFlag("invite.enabled", false)
-                            .setFeatureFlag("close-captions.enabled", false)
-                            .setFeatureFlag("raise-hand.enabled", false)
-                            .setFeatureFlag("meeting-password.enabled", false)
-                            .setFeatureFlag("recording.enabled", false)
-                            .setFeatureFlag("toolbox.alwaysVisible", false)
-                            .setFeatureFlag("ios.recording.enabled", false)
-                            .setFeatureFlag("live-streaming.enabled", false)
-                            .setFeatureFlag("meeting-name.enabled", false)
-                            .setFeatureFlag("tile-view.enabled", false)
-                            .setUserInfo(_userInfo)
-                            .build();
-                    mJitsiMeetViewReference.getJitsiMeetView().join(options);
+                            .setUserInfo(_userInfo);
+
+                    // Iterate over array of flags passed from RN
+                    for (int i = 0; i < disableFeatures.size(); i++) {
+                        options.setFeatureFlag(disableFeatures.getString(i), false);
+                    }
+
+                    // Build options for call
+                    RNJitsiMeetConferenceOptions finalOptions = options.build();
+
+                    mJitsiMeetViewReference.getJitsiMeetView().join(finalOptions);
                 }
             }
         });
