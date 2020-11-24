@@ -57,7 +57,7 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
                     // Set initial options of call
                     RNJitsiMeetConferenceOptions.Builder options = new RNJitsiMeetConferenceOptions.Builder()
                             .setRoom(url)
-                            .setAudioOnly(true)
+                            .setAudioOnly(false)
                             .setWelcomePageEnabled(false)
                             .setUserInfo(_userInfo);
 
