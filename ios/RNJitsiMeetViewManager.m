@@ -74,6 +74,7 @@ RCT_EXPORT_METHOD(audioCall:(NSString *)urlString userInfo:(NSDictionary *)userI
         JitsiMeetConferenceOptions *options = [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {
             builder.room = urlString;
             builder.userInfo = _userInfo;
+            builder.audioOnly = true;
 
             for (NSString *flag in disableFeatures) {
                 [builder setFeatureFlag:flag withBoolean:NO];
