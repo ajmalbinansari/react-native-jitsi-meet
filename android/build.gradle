@@ -37,7 +37,7 @@ android {
 
 repositories {
   maven {
-      url "https://github.com/softhouse-gr/jitsi-meet/raw/master/repo"
+      url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
   }
   google()
   mavenCentral()
