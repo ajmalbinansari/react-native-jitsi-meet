@@ -1,5 +1,5 @@
 # react-native-jitsi-meet
-React native wrapper for Jitsi Meet SDK
+React native wrapper for Jitsi Meet SDK. Current version uses jitsi-meet v3.6.0
 
 ## Install
 
