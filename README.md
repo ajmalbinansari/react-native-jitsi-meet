@@ -1,9 +1,78 @@
 # react-native-jitsi-meet
 React native wrapper for Jitsi Meet SDK. Current version uses jitsi-meet v3.6.0
 
-## Install
+## Install in your project
 
-`npm install react-native-jitsi-meet --save` 
+```shell
+npm install git+https://github.com/moirognwmonio/react-native-jitsi-meet.git#v3.6.0-dev --save
+cd ios && pod install
+```
+
+### Artifacts that this library uses
+
+#### iOS
+
+- The artifacts to use are: [jitsi-meet-ios-sdk-releases](https://github.com/softhouse-gr/jitsi-meet-ios-sdk-releases).
+- On this library you just need to specify the jitsi-meet-sdk version that was used to create the aformentioned artifacts.
+- This can be done in the react-native-jitsi-meet.podspec file at line 19
+- After that in your project's Podfile you need to add at the end of the file the following line:
+
+```
+pod 'JitsiMeetSDK', :git => 'https://github.com/softhouse-gr/jitsi-meet-ios-sdk-releases.git', :tag => 'v1.0.5-dev'
+```
+
+The above line overides the official pod of JitsiMeetSDK with your custom one.
+
+### Android
+
+- The artifacts to use are: [jitsi-maven-repository](https://github.com/softhouse-gr/jitsi-maven-repository).
+- On this library you need to specify the maven url in the /android/build.gradle, and the jitsi-meet-sdk version that was used to build them, file like this:
+
+```
+repositories {
+  maven {
+      url "https://github.com/softhouse-gr/jitsi-maven-repository/raw/main/releases"
+  }
+  google()
+  mavenCentral()
+  jcenter()
+}
+
+dependencies {
+    implementation ('org.jitsi.react:jitsi-meet-sdk:3.7.0') {
+    // You can exclude the libraries you may use in your project here to prevent duplicates
+    //   exclude group: 'com.facebook.react', module: 'react-native-background-timer'
+    //   exclude group: 'com.facebook.react', module: 'react-native-webview'
+    //   exclude group: 'com.facebook.react', module: 'react-native-async-storage'
+    //   exclude group: 'com.facebook.react', module: 'react-native-community_netinfo'
+    //   exclude group: 'com.facebook.react', module: 'react-native-device-info'
+    //   exclude group: 'com.facebook', module: 'hermes'
+      transitive = true
+    }
+}
+```
+
+- After that, in your project at android/build.gradle you must add the following:
+```shell
+allprojects {
+    repositories {
+        ...
+        maven {
+            // Custom jitsi meet sdk
+            url "https://github.com/softhouse-gr/jitsi-maven-repository/raw/main/releases"
+            // Original library
+            // url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
+        }
+        ...
+   }
+}
+```
+
+## [Jitsi Meet](https://github.com/moirognwmonio/jitsi-meet)
+
+- The source project jitsi-meet can be found [here](https://github.com/moirognwmonio/jitsi-meet), which contains all the docs that you wll need to create your custom artifacts.
+
+## Original readme
 
 If you are using React-Native < 0.60, you should use a version < 2.0.0.  
 For versions higher than 2.0.0, you need to add the following piece of code in your ```metro.config.js``` file to avoid conflicts between react-native-jitsi-meet and react-native in metro bundler.
