@@ -1,4 +1,5 @@
 #import <JitsiMeetSDK/JitsiMeetSDK.h>
+//@import JitsiMeetSDK;
 
 #import <React/RCTComponent.h>
 
