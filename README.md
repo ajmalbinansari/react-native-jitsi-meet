@@ -13,7 +13,7 @@ cd ios && pod install
 #### iOS
 
 - The artifacts to use are: [jitsi-meet-ios-sdk-releases](https://github.com/softhouse-gr/jitsi-meet-ios-sdk-releases).
-- On this library you just need to specify the jitsi-meet-sdk version that was used to create the aformentioned artifacts.
+- On this library you just need to specify the jitsi-meet-sdk version that was used to create the aforementioned artifacts.
 - This can be done in the react-native-jitsi-meet.podspec file at line 19
 - After that in your project's Podfile you need to add at the end of the file the following line:
 
@@ -21,7 +21,7 @@ cd ios && pod install
 pod 'JitsiMeetSDK', :git => 'https://github.com/softhouse-gr/jitsi-meet-ios-sdk-releases.git', :tag => 'v1.0.5-dev'
 ```
 
-The above line overides the official pod of JitsiMeetSDK with your custom one.
+The above line overrides the official pod of JitsiMeetSDK with your custom one.
 
 ### Android
 
@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    implementation ('org.jitsi.react:jitsi-meet-sdk:3.7.0') {
+    implementation ('org.jitsi.react:jitsi-meet-sdk:3.6.0') {
     // You can exclude the libraries you may use in your project here to prevent duplicates
     //   exclude group: 'com.facebook.react', module: 'react-native-background-timer'
     //   exclude group: 'com.facebook.react', module: 'react-native-webview'
@@ -57,16 +57,50 @@ dependencies {
 allprojects {
     repositories {
         ...
+        mavenLocal()
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url("$rootDir/../node_modules/react-native/android")
+        }
+
         maven {
             // Custom jitsi meet sdk
             url "https://github.com/softhouse-gr/jitsi-maven-repository/raw/main/releases"
-            // Original library
-            // url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
+
+            // Used for Vsale <= v2.0.6
+            // url "https://github.com/softhouse-gr/jitsi-meet/raw/master/repo"
         }
+
+        maven {
+            // Android JSC is installed from npm
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
+
+        google()
+        jcenter()
+        maven { url 'https://www.jitpack.io' }
         ...
    }
 }
 ```
+
+# Notes
+
+1) (**RN**) Building jitsi-meet
+- Build from jitsi-meet >= v4.0.0 would cause a launch error,
+- because we are using reanimated library >= v2.0.0,
+- but jitsi-meet is using a version < v2.0.0,
+- which is incompatible.
+
+2) (**ANDROID**) Building jitsi-meet 
+- from android-sdk-3.6.0 tag will have as a result a successful launch of the app
+- but buttons on android will not work because of [that](https://github.com/jitsi/jitsi-meet/issues/8948#issuecomment-856566676).
+- A solution could be to fork the custom react-native from jitsi meet
+- and make the necessary changes [here](https://github.com/jitsi/react-native/blob/891986ec5ecaef65d1c8a7fe472f86cf84fe7551/Libraries/Components/Touchable/Touchable.js#L888) to fix the android error.
+- A quicker solution but not recommended,
+- is the change of Touchable.js in the node_modules to use the SoundManager library for the playTouchSound function,
+- as indicated [here](https://github.com/facebook/react-native/commit/9dbe5e241e3137196102fb808c181c57554fedfe).
+- Obviously, this should be done every time you reinstall your packages in jitsi-meet because you changed the node_modules. 
 
 ## [Jitsi Meet](https://github.com/moirognwmonio/jitsi-meet)
 
