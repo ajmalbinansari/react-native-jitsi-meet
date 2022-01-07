@@ -4,7 +4,7 @@ React native wrapper for Jitsi Meet SDK. Current version uses jitsi-meet v3.6.0
 ## Install in your project
 
 ```shell
-npm install git+https://github.com/moirognwmonio/react-native-jitsi-meet.git#v3.6.0-dev --save
+yarn add git+https://github.com/moirognwmonio/react-native-jitsi-meet.git#v3.6.0
 cd ios && pod install
 ```
 
@@ -18,7 +18,7 @@ cd ios && pod install
 - After that in your project's Podfile you need to add at the end of the file the following line:
 
 ```
-pod 'JitsiMeetSDK', :git => 'https://github.com/softhouse-gr/jitsi-meet-ios-sdk-releases.git', :tag => 'v1.0.5-dev'
+pod 'JitsiMeetSDK', :git => 'https://github.com/softhouse-gr/jitsi-meet-ios-sdk-releases.git', :tag => 'v3.6.0'
 ```
 
 The above line overrides the official pod of JitsiMeetSDK with your custom one.
@@ -40,13 +40,13 @@ repositories {
 
 dependencies {
     implementation ('org.jitsi.react:jitsi-meet-sdk:3.6.0') {
-    // You can exclude the libraries you may use in your project here to prevent duplicates
-    //   exclude group: 'com.facebook.react', module: 'react-native-background-timer'
-    //   exclude group: 'com.facebook.react', module: 'react-native-webview'
-    //   exclude group: 'com.facebook.react', module: 'react-native-async-storage'
-    //   exclude group: 'com.facebook.react', module: 'react-native-community_netinfo'
-    //   exclude group: 'com.facebook.react', module: 'react-native-device-info'
-    //   exclude group: 'com.facebook', module: 'hermes'
+      // You can exclude the libraries you may use in your project here to prevent duplicates
+      // exclude group: 'com.facebook.react', module: 'react-native-background-timer'
+      // exclude group: 'com.facebook.react', module: 'react-native-webview'
+      // exclude group: 'com.facebook.react', module: 'react-native-async-storage'
+      // exclude group: 'com.facebook.react', module: 'react-native-community_netinfo'
+      // exclude group: 'com.facebook.react', module: 'react-native-device-info'
+      // exclude group: 'com.facebook', module: 'hermes'
       transitive = true
     }
 }
@@ -97,6 +97,7 @@ allprojects {
 - but buttons on android will not work because of [that](https://github.com/jitsi/jitsi-meet/issues/8948#issuecomment-856566676).
 - A solution could be to fork the custom react-native from jitsi meet
 - and make the necessary changes [here](https://github.com/jitsi/react-native/blob/891986ec5ecaef65d1c8a7fe472f86cf84fe7551/Libraries/Components/Touchable/Touchable.js#L888) to fix the android error.
+- You could also update the react-native version of jitsi-meet to > v0.63.4 which fixes the error.
 - A quicker solution but not recommended,
 - is the change of Touchable.js in the node_modules to use the SoundManager library for the playTouchSound function,
 - as indicated [here](https://github.com/facebook/react-native/commit/9dbe5e241e3137196102fb808c181c57554fedfe).
