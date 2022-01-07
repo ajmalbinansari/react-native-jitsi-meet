@@ -1,9 +1,113 @@
 # react-native-jitsi-meet
-React native wrapper for Jitsi Meet SDK
+React native wrapper for Jitsi Meet SDK. Current version uses jitsi-meet v3.6.0
 
-## Install
+## Install in your project
 
-`npm install react-native-jitsi-meet --save` 
+```shell
+yarn add git+https://github.com/moirognwmonio/react-native-jitsi-meet.git#v3.6.0
+cd ios && pod install
+```
+
+### Artifacts that this library uses
+
+#### iOS
+
+- The artifacts to use are: [jitsi-meet-ios-sdk-releases](https://github.com/softhouse-gr/jitsi-meet-ios-sdk-releases).
+- On this library you just need to specify the jitsi-meet-sdk version that was used to create the aforementioned artifacts.
+- This can be done in the react-native-jitsi-meet.podspec file at line 19
+- After that in your project's Podfile you need to add at the end of the file the following line:
+
+```
+pod 'JitsiMeetSDK', :git => 'https://github.com/softhouse-gr/jitsi-meet-ios-sdk-releases.git', :tag => 'v3.6.0'
+```
+
+The above line overrides the official pod of JitsiMeetSDK with your custom one.
+
+### Android
+
+- The artifacts to use are: [jitsi-maven-repository](https://github.com/softhouse-gr/jitsi-maven-repository).
+- On this library you need to specify the maven url in the /android/build.gradle, and the jitsi-meet-sdk version that was used to build them, file like this:
+
+```
+repositories {
+  maven {
+      url "https://github.com/softhouse-gr/jitsi-maven-repository/raw/main/releases"
+  }
+  google()
+  mavenCentral()
+  jcenter()
+}
+
+dependencies {
+    implementation ('org.jitsi.react:jitsi-meet-sdk:3.6.0') {
+      // You can exclude the libraries you may use in your project here to prevent duplicates
+      // exclude group: 'com.facebook.react', module: 'react-native-background-timer'
+      // exclude group: 'com.facebook.react', module: 'react-native-webview'
+      // exclude group: 'com.facebook.react', module: 'react-native-async-storage'
+      // exclude group: 'com.facebook.react', module: 'react-native-community_netinfo'
+      // exclude group: 'com.facebook.react', module: 'react-native-device-info'
+      // exclude group: 'com.facebook', module: 'hermes'
+      transitive = true
+    }
+}
+```
+
+- After that, in your project at android/build.gradle you must add the following:
+```shell
+allprojects {
+    repositories {
+        ...
+        mavenLocal()
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url("$rootDir/../node_modules/react-native/android")
+        }
+
+        maven {
+            // Custom jitsi meet sdk
+            url "https://github.com/softhouse-gr/jitsi-maven-repository/raw/main/releases"
+
+            // Used for Vsale <= v2.0.6
+            // url "https://github.com/softhouse-gr/jitsi-meet/raw/master/repo"
+        }
+
+        maven {
+            // Android JSC is installed from npm
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
+
+        google()
+        jcenter()
+        maven { url 'https://www.jitpack.io' }
+        ...
+   }
+}
+```
+
+# Notes
+
+1) (**RN**) Building jitsi-meet
+- Build from jitsi-meet >= v4.0.0 would cause a launch error,
+- because we are using reanimated library >= v2.0.0,
+- but jitsi-meet is using a version < v2.0.0,
+- which is incompatible.
+
+2) (**ANDROID**) Building jitsi-meet 
+- from android-sdk-3.6.0 tag will have as a result a successful launch of the app
+- but buttons on android will not work because of [that](https://github.com/jitsi/jitsi-meet/issues/8948#issuecomment-856566676).
+- A solution could be to fork the custom react-native from jitsi meet
+- and make the necessary changes [here](https://github.com/jitsi/react-native/blob/891986ec5ecaef65d1c8a7fe472f86cf84fe7551/Libraries/Components/Touchable/Touchable.js#L888) to fix the android error.
+- You could also update the react-native version of jitsi-meet to > v0.63.4 which fixes the error.
+- A quicker solution but not recommended,
+- is the change of Touchable.js in the node_modules to use the SoundManager library for the playTouchSound function,
+- as indicated [here](https://github.com/facebook/react-native/commit/9dbe5e241e3137196102fb808c181c57554fedfe).
+- Obviously, this should be done every time you reinstall your packages in jitsi-meet because you changed the node_modules. 
+
+## [Jitsi Meet](https://github.com/moirognwmonio/jitsi-meet)
+
+- The source project jitsi-meet can be found [here](https://github.com/moirognwmonio/jitsi-meet), which contains all the docs that you wll need to create your custom artifacts.
+
+## Original readme
 
 If you are using React-Native < 0.60, you should use a version < 2.0.0.  
 For versions higher than 2.0.0, you need to add the following piece of code in your ```metro.config.js``` file to avoid conflicts between react-native-jitsi-meet and react-native in metro bundler.

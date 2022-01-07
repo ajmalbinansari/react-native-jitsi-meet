@@ -1,6 +1,6 @@
 #import "RNJitsiMeetViewManager.h"
 #import "RNJitsiMeetView.h"
-#import <JitsiMeet/JitsiMeetUserInfo.h>
+#import <JitsiMeetSDK/JitsiMeetUserInfo.h>
 
 @implementation RNJitsiMeetViewManager{
     RNJitsiMeetView *jitsiMeetView;
@@ -49,6 +49,9 @@ RCT_EXPORT_METHOD(call:(NSString *)urlString userInfo:(NSDictionary *)userInfo :
             for (NSString *flag in disableFeatures) {
                 [builder setFeatureFlag:flag withBoolean:NO];
             }
+
+            // [builder setFeatureFlag:@"pip.enabled" withBoolean:NO];
+            // [builder setFeatureFlag:@"calendar.enabled" withBoolean:NO];
         }];
 
         [jitsiMeetView join:options];
@@ -76,10 +79,14 @@ RCT_EXPORT_METHOD(audioCall:(NSString *)urlString userInfo:(NSDictionary *)userI
             builder.room = urlString;
             builder.userInfo = _userInfo;
             builder.audioOnly = true;
+            // builder.audioOnly = YES;
 
             for (NSString *flag in disableFeatures) {
                 [builder setFeatureFlag:flag withBoolean:NO];
             }
+
+            //[builder setFeatureFlag:@"pip.enabled" withBoolean:NO];
+            //[builder setFeatureFlag:@"calendar.enabled" withBoolean:NO];
         }];
 
         [jitsiMeetView join:options];
